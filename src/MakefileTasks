@@ -1,0 +1,106 @@
+I ?= test
+IN := $(BINDIR)/$(I).txt
+
+MAKE := make --no-print-directory IN=$(IN)
+
+# task 1
+.PHONY: mnk mkn kmn nmk nkm knm baseline tasks1
+
+mnk: $(M)
+	@$(M) $(IN) 1 1 1
+
+mkn: $(M)
+	@$(M) $(IN) 1 2 1
+
+kmn: $(M)
+	@$(M) $(IN) 1 3 1
+
+nmk: $(M)
+	@$(M) $(IN) 1 4 1
+
+nkm: $(M)
+	@$(M) $(IN) 1 5 1
+
+knm: $(M)
+	@$(M) $(IN) 1 6 1
+
+baseline: mnk
+
+tasks1:
+	@echo Task 1
+	@$(MAKE) mnk
+	@$(MAKE) mkn
+	@$(MAKE) kmn
+	@$(MAKE) nmk
+	@$(MAKE) nkm
+	@$(MAKE) knm
+
+# task 2
+
+.PHONY: t_mnk mnkkmn_b32 mnk_lu2 task2_final grade2 tasks2
+
+t_mnk: $(M)
+	@$(M) $(IN) 11 101 1
+
+mnkkmn_b32: $(M)
+	@$(M) $(IN) 1 111 1
+
+mnk_lu2: $(M)
+	@$(M) $(IN) 1 121 1
+
+task2_final: $(M)
+	@$(M) $(IN) 11 301 1
+
+grade2: task2_final
+
+tasks2:
+	@echo Task 2
+	@$(MAKE) mnk
+	@$(MAKE) t_mnk
+	@$(MAKE) mnkkmn_b32
+	@$(MAKE) mnk_lu2
+	@$(MAKE) task2_final
+
+# task 3
+
+.PHONY: simd o3 simd-o3 grade3 tasks3
+
+simd: $(MS)
+	@$(MS) $(IN) 11 201 1
+
+o3: $(MO)
+	@$(MO) $(IN) 1 1 1
+
+simd-o3: $(MO)
+	@$(MO) $(IN) 11 201 1
+
+
+grade3: simd
+
+tasks3:
+	@echo Task 3
+	@$(MAKE) mnk
+	@$(MAKE) simd
+	@$(MAKE) o3
+	@$(MAKE) simd-o3
+
+# useful all-in-one target
+
+.PHONY: tasks
+
+tasks:
+	@$(MAKE) tasks1
+	@$(MAKE) tasks2
+	@$(MAKE) tasks3
+
+# 在 MakefileTasks 的最后面添加
+.PHONY: log
+
+log:
+	@echo "Starting Task 1 benchmarks..."
+	$(MS) $(IN) 1 1 1 > tasks1_run.log
+	@echo "Starting Task 2 benchmarks..."
+	$(MS) $(IN) 11 301 1 >> tasks2_run.log
+	@echo "Starting Task 3 benchmarks..."
+	$(MO) $(IN) 11 201 1 > tasks3_run.log
+	@echo "All logs generated: tasks1_run.log, tasks2_run.log, tasks3_run.log"
